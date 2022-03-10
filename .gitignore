@@ -1,0 +1,8 @@
+# DEPENDENCIES
+node_modules/
+
+# ENVIRONMENT
+.env
+
+# DOCKER
+mysql_data/

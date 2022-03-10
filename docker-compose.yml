@@ -1,0 +1,12 @@
+version: '3.3'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=stac-tecnologias-sas-db
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./src/db/mysql_data:/var/lib/mysql
