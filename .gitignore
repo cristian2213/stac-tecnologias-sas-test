@@ -6,3 +6,6 @@ node_modules/
 
 # DOCKER
 mysql_data/
+
+# DRAW.IO
+~$diagram_er.drawio.dtmp

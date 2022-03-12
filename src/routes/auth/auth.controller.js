@@ -4,13 +4,23 @@ const { StatusCodes } = require('http-status-codes');
 const handleHttpError = require('../../services/handleHttpError');
 const { getUserByFilter } = require('../../models/users.model');
 const { comparePasswords } = require('../../helpers/passwords');
+const { Role } = require('../../db/models/index');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 async function httpLogin(req, res) {
   const { email, password } = req.body;
   try {
-    const filter = { where: { email } };
+    const filter = {
+      include: [
+        {
+          model: Role,
+          as: 'roles',
+          require: true,
+        },
+      ],
+      where: { email },
+    };
     const user = await getUserByFilter(filter);
 
     if (!user)
@@ -27,8 +37,8 @@ async function httpLogin(req, res) {
         message: 'The passwords do not match.',
       });
 
-    // FIXME - ROLE
-    user.roles = 'admin';
+    const roles = user.roles.map((role) => role.name);
+    user.roles = roles.join(',');
 
     const payload = {
       sub: id,

@@ -3,6 +3,7 @@ const {
   getAllUsers,
   getOneUser,
   addNewUser,
+  associateRoles,
 } = require('../../models/users.model');
 const handleHttpError = require('../../services/handleHttpError');
 
@@ -18,8 +19,14 @@ async function httpGetAllUsers(req, res) {
 async function httpAddNewUser(req, res) {
   try {
     const userData = req.body;
+    const { roles } = req.body;
     const newUser = await addNewUser(userData);
-    return res.status(StatusCodes.OK).json(newUser);
+
+    const establishedRoles = await associateRoles(newUser, roles);
+
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ user: newUser, roles: establishedRoles });
   } catch (error) {
     handleHttpError(res, error);
   }

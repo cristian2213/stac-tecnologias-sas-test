@@ -1,4 +1,5 @@
 const { User } = require('../db/models/index');
+const { ROLES } = require('../services/roles');
 
 async function getAllUsers(filter = null) {
   return await User.findAll(filter);
@@ -21,4 +22,21 @@ async function getUserByFilter(filter) {
   return user;
 }
 
-module.exports = { getAllUsers, getOneUser, addNewUser, getUserByFilter };
+async function associateRoles(user, roles = null) {
+  const defaultRoles = roles || [ROLES.CUSTOMER];
+
+  const establishedRoles = [];
+  for (let i = 0; i < defaultRoles.length; i++) {
+    establishedRoles.push(await user.createRole({ name: defaultRoles[i] }));
+  }
+
+  return establishedRoles;
+}
+
+module.exports = {
+  getAllUsers,
+  getOneUser,
+  addNewUser,
+  getUserByFilter,
+  associateRoles,
+};

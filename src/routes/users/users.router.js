@@ -7,6 +7,7 @@ const {
 } = require('./users.controller');
 const { addNewUserValidator, paramValidator } = require('./users.validator');
 const verifyToken = require('../../middlewares/auth/verifyToken');
+const { isAdmin } = require('../../middlewares/auth/authRoles');
 
 usersRouter.get('/', httpGetAllUsers);
 usersRouter.post('/', verifyToken, addNewUserValidator, httpAddNewUser);
